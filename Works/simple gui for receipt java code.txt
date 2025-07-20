@@ -1,0 +1,429 @@
+package com.mycompany.restaurantgui;
+import javax.swing.*;
+import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RestaurantGUI {
+    private static final double TAX_RATE = 0.10;
+    private double totalAmount = 0.00;
+    private final List<String> orderItems = new ArrayList<>();
+    private final DecimalFormat df = new DecimalFormat("₱#,##0.00");
+
+    private JFrame frame;
+    private JTextArea receiptArea;
+    private JPanel mainPanel;
+    private JPanel welcomePanel;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new RestaurantGUI().createAndShowGUI());
+    }
+
+    private void createAndShowGUI() {
+        frame = new JFrame("Sizzling Magic Restaurant");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setLayout(new BorderLayout());
+
+        createWelcomePanel();
+        frame.add(welcomePanel, BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+
+    private void createWelcomePanel() {
+        welcomePanel = new JPanel(new BorderLayout());
+        welcomePanel.setBackground(new Color(255, 240, 220));
+
+        JLabel welcomeLabel = new JLabel("Welcome to Sizzling Magic!", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        welcomeLabel.setForeground(new Color(139, 69, 19)); 
+        welcomeLabel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+
+        JButton startButton = new JButton("Start Ordering");
+        startButton.setFont(new Font("Arial", Font.BOLD, 20));
+        startButton.setBackground(new Color(210, 105, 30)); // Chocolate color
+        startButton.setForeground(Color.WHITE);
+        startButton.setFocusPainted(false);
+        startButton.addActionListener(e -> {
+            frame.remove(welcomePanel);
+            createMainInterface();
+            frame.revalidate();
+            frame.repaint();
+        });
+
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(new Color(255, 240, 220));
+        centerPanel.add(welcomeLabel, BorderLayout.CENTER);
+        
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+
+        welcomePanel.add(centerPanel, BorderLayout.CENTER);
+        welcomePanel.add(startButton, BorderLayout.SOUTH);
+    }
+
+    private void createMainInterface() {
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(255, 250, 240));
+
+        
+        JPanel menuPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        menuPanel.setBackground(new Color(255, 250, 240));
+
+        
+        JButton mealsButton = createMenuButton("Sizzling Meals", new Color(178, 34, 34));
+        mealsButton.addActionListener(e -> showMealsMenu());
+        menuPanel.add(mealsButton);
+
+        
+        JButton dessertButton = createMenuButton("Dessert", new Color(218, 165, 32));
+        dessertButton.addActionListener(e -> showDessertMenu());
+        menuPanel.add(dessertButton);
+
+        
+        JButton drinksButton = createMenuButton("Drinks", new Color(70, 130, 180));
+        drinksButton.addActionListener(e -> showDrinksMenu());
+        menuPanel.add(drinksButton);
+
+        
+        receiptArea = new JTextArea();
+        receiptArea.setEditable(false);
+        receiptArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        receiptArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JScrollPane receiptScrollPane = new JScrollPane(receiptArea);
+
+        
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        controlPanel.setBackground(new Color(255, 250, 240));
+
+        
+        JButton clearLastButton = new JButton("Remove Last Item");
+        clearLastButton.setFont(new Font("Arial", Font.BOLD, 14));
+        clearLastButton.setBackground(new Color(220, 20, 60));
+        clearLastButton.setForeground(Color.WHITE);
+        clearLastButton.addActionListener(e -> removeLastItem());
+        controlPanel.add(clearLastButton);
+
+        
+        JButton clearAllButton = new JButton("Clear All");
+        clearAllButton.setFont(new Font("Arial", Font.BOLD, 14));
+        clearAllButton.setBackground(new Color(220, 20, 60));
+        clearAllButton.setForeground(Color.WHITE);
+        clearAllButton.addActionListener(e -> clearAll());
+        controlPanel.add(clearAllButton);
+
+        
+        JButton finishButton = new JButton("Finish Order");
+        finishButton.setFont(new Font("Arial", Font.BOLD, 14));
+        finishButton.setBackground(new Color(34, 139, 34));
+        finishButton.setForeground(Color.WHITE);
+        finishButton.addActionListener(e -> finishOrder());
+        controlPanel.add(finishButton);
+
+        
+        mainPanel.add(menuPanel, BorderLayout.NORTH);
+        mainPanel.add(receiptScrollPane, BorderLayout.CENTER);
+        mainPanel.add(controlPanel, BorderLayout.SOUTH);
+
+        frame.add(mainPanel, BorderLayout.CENTER);
+    }
+
+    private JButton createMenuButton(String text, Color color) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 18));
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(15, 5, 15, 5));
+        return button;
+    }
+
+    private void showMealsMenu() {
+        String[] meals = {
+            "Pork Sisig - ₱129.00",
+            "Chicken Sisig - ₱129.00",
+            "Bagnet Sisig - ₱139.00",
+            "Bangus Sisig - ₱129.00",
+            "Beef T-Bone - ₱169.00",
+            "Burger Steak - ₱119.00"
+        };
+        double[] prices = {129, 129, 139, 129, 169, 119};
+
+        String selectedItem = (String) JOptionPane.showInputDialog(
+            frame,
+            "Select a Sizzling Meal:",
+            "Sizzling Meals",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            meals,
+            meals[0]);
+
+        if (selectedItem != null) {
+            int index = -1;
+            for (int i = 0; i < meals.length; i++) {
+                if (meals[i].equals(selectedItem)) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index >= 0) {
+                String quantityStr = JOptionPane.showInputDialog(frame, "Enter quantity:", "1");
+                try {
+                    int quantity = quantityStr.isEmpty() ? 1 : Integer.parseInt(quantityStr);
+                    if (quantity > 0) {
+                        double itemTotal = prices[index] * quantity;
+                        String itemName = meals[index].split(" - ")[0];
+                        orderItems.add(String.format("%s x%d - %s", itemName, quantity, df.format(itemTotal)));
+                        totalAmount += itemTotal;
+                        updateReceipt();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Quantity must be positive", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(frame, "Invalid quantity", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void showDessertMenu() {
+        String[] desserts = {
+            "Mango Shake - ₱109.00",
+            "Strawberry Shake - ₱109.00",
+            "Leche Flan - ₱99.00",
+            "Halo-Halo Special - ₱139.00"
+        };
+        double[] prices = {109, 109, 99, 139};
+
+        String selectedItem = (String) JOptionPane.showInputDialog(
+            frame,
+            "Select a Dessert:",
+            "Desserts",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            desserts,
+            desserts[0]);
+
+        if (selectedItem != null) {
+            int index = -1;
+            for (int i = 0; i < desserts.length; i++) {
+                if (desserts[i].equals(selectedItem)) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index >= 0) {
+                String quantityStr = JOptionPane.showInputDialog(frame, "Enter quantity:", "1");
+                try {
+                    int quantity = quantityStr.isEmpty() ? 1 : Integer.parseInt(quantityStr);
+                    if (quantity > 0) {
+                        double itemTotal = prices[index] * quantity;
+                        String itemName = desserts[index].split(" - ")[0];
+                        orderItems.add(String.format("%s x%d - %s", itemName, quantity, df.format(itemTotal)));
+                        totalAmount += itemTotal;
+                        updateReceipt();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Quantity must be positive", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(frame, "Invalid quantity", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void showDrinksMenu() {
+        String[] drinks = {
+            "Coke 1.5L - ₱90.00",
+            "Coke Zero 1.5L - ₱90.00",
+            "Royal 1.5L - ₱90.00",
+            "Sprite 1.5L - ₱90.00",
+            "Mug Root Beer 1.5L - ₱90.00"
+        };
+        double[] prices = {90, 90, 90, 90, 90};
+
+        String selectedItem = (String) JOptionPane.showInputDialog(
+            frame,
+            "Select a Drink:",
+            "Drinks",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            drinks,
+            drinks[0]);
+
+        if (selectedItem != null) {
+            int index = -1;
+            for (int i = 0; i < drinks.length; i++) {
+                if (drinks[i].equals(selectedItem)) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index >= 0) {
+                String quantityStr = JOptionPane.showInputDialog(frame, "Enter quantity:", "1");
+                try {
+                    int quantity = quantityStr.isEmpty() ? 1 : Integer.parseInt(quantityStr);
+                    if (quantity > 0) {
+                        double itemTotal = prices[index] * quantity;
+                        String itemName = drinks[index].split(" - ")[0];
+                        orderItems.add(String.format("%s x%d - %s", itemName, quantity, df.format(itemTotal)));
+                        totalAmount += itemTotal;
+                        updateReceipt();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Quantity must be positive", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(frame, "Invalid quantity", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    private void updateReceipt() {
+        StringBuilder receiptBuilder = new StringBuilder();
+        receiptBuilder.append("          SIZZLING MAGIC RESTAURANT\n");
+        receiptBuilder.append("--------------------------------------------\n");
+        
+        for (String item : orderItems) {
+            receiptBuilder.append(item).append("\n");
+        }
+        
+        receiptBuilder.append("--------------------------------------------\n");
+        receiptBuilder.append(String.format("Subtotal: %42s\n", df.format(totalAmount)));
+        receiptBuilder.append(String.format("Tax (10%%): %41s\n", df.format(totalAmount * TAX_RATE)));
+        receiptBuilder.append(String.format("Total: %45s\n", df.format(totalAmount * (1 + TAX_RATE))));
+        receiptBuilder.append("--------------------------------------------\n");
+        
+        receiptArea.setText(receiptBuilder.toString());
+    }
+
+    private void removeLastItem() {
+        if (!orderItems.isEmpty()) {
+            // Get the price of the last item by parsing the string
+            String lastItem = orderItems.get(orderItems.size() - 1);
+            String priceStr = lastItem.substring(lastItem.lastIndexOf("₱") + 1);
+            try {
+                double price = Double.parseDouble(priceStr.replace(",", ""));
+                totalAmount -= price;
+                orderItems.remove(orderItems.size() - 1);
+                updateReceipt();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frame, "Error removing item", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "No items to remove", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void clearAll() {
+        if (!orderItems.isEmpty()) {
+            int confirm = JOptionPane.showConfirmDialog(
+                frame, 
+                "Are you sure you want to clear all items?", 
+                "Confirm Clear", 
+                JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                orderItems.clear();
+                totalAmount = 0.00;
+                updateReceipt();
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "No items to clear", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void finishOrder() {
+    if (orderItems.isEmpty()) {
+        JOptionPane.showMessageDialog(frame, "No items in the order", "Information", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    double tax = totalAmount * TAX_RATE;
+    double finalAmount = totalAmount + tax;
+
+    // Create payment dialog
+    JPanel paymentPanel = new JPanel(new GridLayout(4, 2, 5, 5));
+    paymentPanel.add(new JLabel("Subtotal:"));
+    paymentPanel.add(new JLabel(df.format(totalAmount)));
+    paymentPanel.add(new JLabel("Tax (10%):"));
+    paymentPanel.add(new JLabel(df.format(tax)));
+    paymentPanel.add(new JLabel("Total:"));
+    paymentPanel.add(new JLabel(df.format(finalAmount)));
+    paymentPanel.add(new JLabel("Enter payment amount:"));
+    JTextField paymentField = new JTextField();
+    paymentPanel.add(paymentField);
+
+    int option = JOptionPane.showConfirmDialog(
+        frame, 
+        paymentPanel, 
+        "Payment", 
+        JOptionPane.OK_CANCEL_OPTION, 
+        JOptionPane.PLAIN_MESSAGE);
+
+    if (option == JOptionPane.OK_OPTION) {
+        try {
+            double payment = Double.parseDouble(paymentField.getText());
+            if (payment >= finalAmount) {
+                double change = payment - finalAmount;
+                
+                // Create final receipt
+                StringBuilder finalReceipt = new StringBuilder();
+                finalReceipt.append("          SIZZLING MAGIC RESTAURANT\n");
+                finalReceipt.append("--------------------------------------------\n");
+                
+                for (String item : orderItems) {
+                    finalReceipt.append(item).append("\n");
+                }
+                
+                finalReceipt.append("--------------------------------------------\n");
+                finalReceipt.append(String.format("Subtotal: %42s\n", df.format(totalAmount)));
+                finalReceipt.append(String.format("Tax (10%%): %41s\n", df.format(tax)));
+                finalReceipt.append(String.format("Total: %45s\n", df.format(finalAmount)));
+                finalReceipt.append(String.format("Payment: %43s\n", df.format(payment)));
+                finalReceipt.append(String.format("Change: %44s\n", df.format(change)));
+                finalReceipt.append("--------------------------------------------\n");
+                finalReceipt.append("      Thank you for dining with us!\n");
+                finalReceipt.append("          Please come again!\n");
+                
+                // Show receipt in a scrollable text area
+                JTextArea receiptTextArea = new JTextArea(finalReceipt.toString());
+                receiptTextArea.setEditable(false);
+                receiptTextArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+                
+                // Create buttons for options
+                Object[] options = {"Order Again", "Exit Program"};
+                int choice = JOptionPane.showOptionDialog(
+                    frame,
+                    new JScrollPane(receiptTextArea),
+                    "Order Receipt",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+                
+                if (choice == 1) { 
+                    System.exit(0);
+                } else { 
+                    orderItems.clear();
+                    totalAmount = 0.00;
+                    updateReceipt();
+                }
+            } else {
+                JOptionPane.showMessageDialog(
+                    frame, 
+                    "Insufficient payment. Amount due: " + df.format(finalAmount), 
+                    "Payment Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frame, "Invalid payment amount", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+}

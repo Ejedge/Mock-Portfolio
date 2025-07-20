@@ -1,0 +1,174 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: #f2eee900;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='92' viewBox='0 0 80 92' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.06'%3E%3Cpath d='M40 0L79.9995 23V69L40 92L0.000488281 69V23L40 0Z' stroke='%230A0F2C'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 150px;
+    color: #1B263E;
+    padding: 0 25px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.facebook-header {
+    position: relative;
+    background-color: #F2EEE9;
+}
+
+.cover-photo {
+    height: 500px;
+    background-color: #0A0F2C; 
+    background-image: url('images/background\ final.jpg'); 
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 5%;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.profile-info {
+    position: absolute;
+    bottom: -60%;
+    left: 14%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: rgba(10, 15, 44, 0); 
+    padding: 20px 30px;
+    border-radius: 15px;
+}
+
+.profile-pic {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #F2EEE9;
+}
+
+.profile-text {
+    text-align: left;
+}
+
+.profile-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #C865FF;
+}
+
+.profile-bio {
+    font-size: 16px;
+    color: #C865FF;
+}
+
+main {
+    margin-top: 100px;
+}
+
+section {
+    background-color: #FFFFFF; 
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: 0 6px 16px rgba(0, 207, 255, 0.15); 
+    border: 1px solid #C865FF;  
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 207, 255, 0.25);
+}
+
+h2 {
+    font-size: 24px;
+    color: #C865FF;
+    margin-bottom: 15px;
+    border-left: 5px solid #C865FF;
+    padding-left: 10px;
+}
+
+.skills ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.skills ul li {
+    background-color: #c965ff50; 
+    color: #0C0E2C;
+    margin: 5px 0;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.experience-item, .work-item, .seminar-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-left: 4px solid #C865FF;
+    border-radius: 8px;
+}
+
+.experience-item h3, .work-item h3, .seminar-item h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #0C0E2C;
+}
+
+.experience-item p, .work-item p, .seminar-item p {
+    font-size: 15px;
+    color: #1B263E;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: #C865FF;
+    color: #F2EEE9;
+    margin-top: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+footer h3 {
+    font-size: 22px;
+    color: #F2EEE9;
+    margin-bottom: 10px;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #F2EEE9;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    color: #6A7DFF;
+}
+
+footer i {
+    margin-right: 8px;
+    color: #F2EEE9;
+    transition: color 0.3s ease;
+}
+
+footer p:hover i {
+    color: #6A7DFF;
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
