@@ -1,3 +1,36 @@
+:root {
+    --cell-size: 60px;
+    --line-color: rgba(27, 38, 62, 0.1);
+    --glow-color: 200, 101, 255;
+}
+
+#glow-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    background-image:
+        linear-gradient(var(--line-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
+    background-size: var(--cell-size) var(--cell-size);
+}
+
+.glow-cell {
+    position: absolute;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    background: rgba(var(--glow-color), 0);
+    box-shadow: 0 0 0px rgba(var(--glow-color), 0);
+    pointer-events: none;
+    animation: pulse 2s ease-in-out forwards;
+}
+
+@keyframes pulse {
+    0%   { background: rgba(var(--glow-color), 0);    box-shadow: 0 0 0px rgba(var(--glow-color), 0); }
+    20%  { background: rgba(var(--glow-color), 0.55); box-shadow: 0 0 35px 10px rgba(var(--glow-color), 0.55); }
+    100% { background: rgba(var(--glow-color), 0);    box-shadow: 0 0 0px rgba(var(--glow-color), 0); }
+}
 * {
     margin: 0;
     padding: 0;
@@ -7,14 +40,11 @@
 body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
-    background-color: #f2eee900;
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='92' viewBox='0 0 80 92' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.06'%3E%3Cpath d='M40 0L79.9995 23V69L40 92L0.000488281 69V23L40 0Z' stroke='%230A0F2C'/%3E%3C/g%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 150px;
+    background-color: #ffffff;
     color: #1B263E;
     padding: 0 25px;
+    position: relative;
 }
-
 html {
     scroll-behavior: smooth;
 }
@@ -26,8 +56,10 @@ html {
 
 .cover-photo {
     height: 500px;
-    background-color: #0A0F2C; 
-    background-image: url('images/background\ final.jpg'); 
+    background-color: #0A0F2C;
+    background-image: 
+        linear-gradient(to bottom, rgba(10,15,44,0.15), rgba(10,15,44,0.35)),
+        url('images/IMG_2759.jpeg');
     background-size: cover;
     background-position: center;
     margin-bottom: 5%;
@@ -37,15 +69,11 @@ html {
 
 .profile-info {
     position: absolute;
-    bottom: -60%;
-    left: 14%;
-    transform: translate(-50%, -50%);
+    bottom: -50px;
+    left: 40px;
     display: flex;
     align-items: center;
     gap: 20px;
-    background-color: rgba(10, 15, 44, 0); 
-    padding: 20px 30px;
-    border-radius: 15px;
 }
 
 .profile-pic {
@@ -54,25 +82,74 @@ html {
     object-fit: cover;
     border-radius: 50%;
     border: 5px solid #F2EEE9;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.profile-pic:hover {
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.25),
+        0 0 40px 10px rgba(200, 101, 255, 0.6),
+        0 0 80px 20px rgba(200, 101, 255, 0.3);
+    transform: scale(1.03);
 }
 
 .profile-text {
-    text-align: left;
+    background-color: rgba(10, 15, 44, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 12px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .profile-name {
     font-size: 28px;
     font-weight: 700;
-    color: #C865FF;
+    color: #E9A6FF;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    letter-spacing: 0.5px;
 }
 
 .profile-bio {
-    font-size: 16px;
-    color: #C865FF;
+    font-size: 15px;
+    font-weight: 500;
+    color: #F2EEE9;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
-
 main {
     margin-top: 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.about-me {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.experiences {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.skills {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+}
+
+.works {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.Seminar {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+section {
+    margin-top: 0;
 }
 
 section {
@@ -131,6 +208,26 @@ h2 {
     color: #1B263E;
 }
 
+
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+    .about-me, .experiences, .skills, .works, .Seminar {
+        grid-column: 1;
+    }
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+a, p, li, .work-item, .experience-item, .seminar-item {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
 footer {
     text-align: center;
     padding: 30px 20px;
@@ -139,7 +236,9 @@ footer {
     margin-top: 40px;
     border-radius: 10px;
     font-size: 16px;
+    width: 100%;
 }
+
 
 footer h3 {
     font-size: 22px;
